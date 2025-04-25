@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satın Alınan QR Kodları</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        .qr-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+        .qr-item { margin: 10px; }
+        h1 { color: #333; }
+    </style>
+</head>
+<body>
+    <h1>Satın Alınan QR Kodları</h1>
+    <div id="qrList" class="qr-container"></div>
+
+    <script>
+        // URL’den şifreli QR kodlarını al
+        const urlParams = new URLSearchParams(window.location.search);
+        const qrCodesString = urlParams.get("codes");
+
+        if (qrCodesString) {
+            // Virgülle ayrılmış kodları listeye çevir
+            const qrCodes = decodeURIComponent(qrCodesString).split(",");
+
+            // Her QR kodu için bir resim oluştur
+            const qrList = document.getElementById("qrList");
+            qrCodes.forEach(qrCode => {
+                const qrDiv = document.createElement("div");
+                qrDiv.className = "qr-item";
+                new QRCode(qrDiv, {
+                    text: qrCode.trim(),
+                    width: 200,
+                    height: 200
+                });
+                qrList.appendChild(qrDiv);
+            });
+        } else {
+            document.getElementById("qrList").innerHTML = "<p>QR kodu verisi bulunamadı!</p>";
+        }
+    </script>
+</body>
+</html>
